@@ -16,6 +16,15 @@ You login with Google, and bam! The spreadsheet is generated for you.
     1. Mention how you heard about the app (which community, friend’s name)
     2. I’ll respond as soon as I can to give you access (depends on Google’s beta testing user limits)
 
+Once you are approved, simply click on the link provided in the email that was sent to you, then login using your email used for job seeking. 
+
+
+The email scanning will then begin, and may take a couple minutes.
+
+
+You should then be redirected to your spreadsheet with all your job seeking information to date!
+
+
 ## Your export will look something like this:
 
 ![Screenshot 2024-12-29 at 7 41 17_PM (1) (1)](https://github.com/user-attachments/assets/951ae900-c875-4745-9d4b-ac77d313d281)
