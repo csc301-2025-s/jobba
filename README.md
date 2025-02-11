@@ -2,6 +2,8 @@ What is Jobba?
 
 Jobba is a web application designed to aid users in their job seeking process and streamline various tasks such as application tracking, networking, and email communication.
 
+This application implements application tracking through email, a cold response rate calculator, and a spreadsheet display of your current job search.
+
 ## _"um... what's so special about another job tracker spreadsheet?"_
 
 What's special is that the spreadsheet is automatically updated.
@@ -18,12 +20,9 @@ You login with Google, and bam! The spreadsheet is generated for you.
 
 Once you are approved, simply click on the link provided in the email that was sent to you, then login using your email used for job seeking. 
 
-
 The email scanning will then begin, and may take a couple minutes.
 
-
-You should then be redirected to your spreadsheet with all your job seeking information to date!
-
+You should then be redirected to your exported spreadsheet with all your job seeking information to date!
 
 ## Your export will look something like this:
 
@@ -34,6 +33,26 @@ You should then be redirected to your spreadsheet with all your job seeking info
 - _Note_: beginners are welcome!
 - I hope to create a safe space for new open source contributors.
 - No question is dumb
+
+## Running the Application Locally (Developers)
+
+The backend and frontend of the app must be run separately.
+
+Begin by cloning the repo onto your local machine.
+
+The instructions to run the backend are listed in CONTRIBUTING.md, and are as follows:
+
+
+
+The instructions to run the frontend are simple:
+
+Begin by ensuring npm, nvm and node are all installed on your machine.
+
+1. Open a terminal
+2. cd into jobba/frontend (“cd frontend”)
+3. Run “npm i”
+4. Run “npm run dev”
+5. Navigate to localhost:3000 in your browser of choice
 
 ## Vision
 
