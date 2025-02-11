@@ -1,6 +1,10 @@
+What is Jobba?
+
+Jobba is a web application designed to aid users in their job seeking process and streamline various tasks such as application tracking, networking, and email communication.
+
 ## _"um... what's so special about another job tracker spreadsheet?"_
 
-What's special is that the spreadsheet is automagically updated.
+What's special is that the spreadsheet is automatically updated.
 
 You do not have to update the spreadsheet.
 
