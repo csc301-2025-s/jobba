@@ -4,6 +4,77 @@ Jobba is a web application designed to aid users in their job seeking process an
 
 This application implements application tracking through email, a cold response rate calculator, and a spreadsheet display of your current job search.
 
+## Feature Description
+
+## Developer Instructions
+### Prerequisites:
+- `Python 3.11 or lower`
+- `Node 18+`
+
+### Starting the app
+First make sure you have cloned the repository:
+   ```sh
+   git clone https://github.com/lnovitz/jobseeker-analytics.git
+   ```
+
+### Starting the backend:
+1. Go into the backend folder:
+   ```sh
+    cd backend
+   ```
+
+3. Create and activate virtual environment:
+   ```sh
+   # MAC/LINUX
+   python3 -m venv .venv
+   source .venv/bin/activate
+   ```
+   ```sh
+   # WINDOWS (CMD)
+   python -m venv .venv
+   .venv\Scripts\activate
+   ```   
+4. Install dependencies:
+   ```sh
+   pip install -r requirements.txt
+   ```
+5. Copy `.env.example` to `.env`:
+   ```sh
+   cp .env.example .env
+   ```
+6. Edit the `.env` file with your credentials:  
+   ```ini
+   GOOGLE_CLIENT_ID=your-client-id-here
+   COOKIE_SECRET=your-random-secret-here
+   GOOGLE_API_KEY=your-api-key-here
+   DB_HOST=your-db-host-here
+   DB_NAME=your-db-name-here
+   DB_USER=your-db-user-here
+   DB_PASSWORD=your-db-password-here
+   ```
+7. Run FastAPI Server Locally:
+   ```sh
+   uvicorn main:app --reload
+   ```
+8. The backend is now running on:
+   http://127.0.0.1:8000
+
+### Starting the frontend:
+1. Go into the backend folder:
+   ```sh
+   cd frontend
+   ```
+2. Install dependencies:
+   ```sh
+   npm install
+   ```
+3. Run the development server:
+   ```sh
+   npm run dev
+   ```
+4. The frontend is now running on:
+   http://localhost:3000
+
 ## _"um... what's so special about another job tracker spreadsheet?"_
 
 What's special is that the spreadsheet is automatically updated.
