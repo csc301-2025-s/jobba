@@ -1,8 +1,8 @@
 import { test, expect } from '@playwright/test';
 
+// Test to check if spinner icon is visible on the screen.
 test('Spinner is visible', async ({ page }) => {
-  await page.goto('http://localhost:3000/processing'); // Update this if needed
+  await page.goto('http://localhost:3000/processing'); 
 
-  // Expect the spinner to be visible by its data-testid
   await expect(page.locator('[data-testid="spinner_icon"]')).toBeVisible();
 });
