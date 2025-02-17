@@ -35,9 +35,9 @@ The key features of the application are as follows:
 
 ## How to use Jobba:
 - To run this app, click on the following link: [Visit Jobba](https://jobba.onrender.com/)
-- The homepage will load, displaying an overview of Jobba and its functionalities. Locate the navigation bar at the top of the homepage and click the “Login to Google” button to initiate the authentication.
+- The homepage will load, displaying an overview of Jobba and its functionalities. Locate the **navigation bar** at the top of the homepage and click the “**Login to Google**” button to initiate the authentication.
 - The website will redirect you to a Gmail page where you should enter the email credentials from which you want the analysis.
-- If a security warning appears stating that the app is not verified, click "Continue" to proceed.
+- If a security warning appears stating that the app is not verified, click **Continue** to proceed.
 - If prompted, check the permission box to allow Jobba to access relevant email data.
 - After authentication, you will be redirected to a processing page while the application scans your inbox.
 - Once the process is complete, you will be taken to the success page.
