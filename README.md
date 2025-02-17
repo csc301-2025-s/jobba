@@ -35,11 +35,41 @@ The key features of the application are as follows:
 
 ## How to use Jobba:
 - To run this app, click on the following link: [Visit Jobba](https://jobba.onrender.com/)
-- The homepage will load, displaying an overview of Jobba and its functionalities. Locate the **navigation bar** at the top of the homepage and click the “**Login to Google**” button to initiate the authentication.
+- The homepage will load, displaying an overview of Jobba and its functionalities. Locate the **navigation bar** at the top of the homepage and click the **Login to Google** button to initiate the authentication.
 - The website will redirect you to a Gmail page where you should enter the email credentials from which you want the analysis.
 - If a security warning appears stating that the app is not verified, click **Continue** to proceed.
 - If prompted, check the permission box to allow Jobba to access relevant email data.
 - After authentication, you will be redirected to a processing page while the application scans your inbox.
 - Once the process is complete, you will be taken to the success page.
 - The success page contains the Download Job Application Data button from which you download a CSV file containing the extracted job application details.
+
+## Demonstration:
+Below is the visual demonstration of the website and what our current product is like:
+<SHORT VIDEOOOO
+
+## Testing the Features:
+We are using Playwright to test the following:
+  - **UI Elements & Visibility:** Check if elements (buttons, links, etc.) exist and are visible.
+  - **User Interactions:** Simulate user actions like clicks.
+  - **Navigation & Page Loading:** Ensure that pages load correctly and navigation works.
+
+Once you have the app locally, follow these commands to install the package:
+  - cd frontend
+  - npm install --save-dev @playwright/test
+  - python -m playwright install
+
+To run the tests, run the following command:
+  - npx playwright test
+
+Playwright also provides an option to receive a .html Test Report. To use this option, run the following commands:
+  - npx playwright test --reporter=html
+  - npx playwright show-report
+      ADD IMAGE!!!!!!
+## Developer Instructions:
+1. Clone the repository from this GitHub link: [Jobba-Github-link](https://github.com/csc301-2025-s/jobba)
+2. Open the terminal and cd into the project.
+3. Open the develop-render branch by the command:
+     **git checkout render-deploy**
+4. Write the following commands after to install the necessary packages:
+      
 
