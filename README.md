@@ -84,9 +84,9 @@ Playwright also provides an option to receive a .html Test Report. To use this o
   - Run the FastAPI Server using
     - **uvicorn main:app --reload**
 5. To run the application:
-  - **cd frontend**
-  - **npm install .**
-  - **npm run dev**
+    - **cd frontend**
+    - **npm install .**
+    - **npm run dev**
 6. A link will be shown and you should click on the first one to access the website.
 
 ## Deployment Instructions:
