@@ -57,7 +57,7 @@ export default function Home() {
 				</ol>
 
 				<h2 className="text-2xl font-bold mt-6">Did you get a confirmation email? Ready to start?</h2>
-				<div className="mt-4 flex">
+				<div className="mt-4 flex " data-testid="homepage-google-login-button">
 					<GoogleLogin />
 				</div>
 

@@ -3,6 +3,7 @@
 import { Navbar as HeroUINavbar, NavbarContent, NavbarMenuToggle, NavbarBrand, NavbarItem } from "@heroui/react";
 import { Button, Link } from "@heroui/react";
 import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import NextLink from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -30,7 +31,9 @@ export const Navbar = () => {
 				<NavbarBrand as="li" className="gap-3 max-w-fit">
 					<NextLink className="flex justify-start items-center gap-1" href="/">
 						<div>
-							<p className="text-md font-bold text-inherit">jobba.help</p>
+							<p className="text-md font-bold text-inherit" data-testid="Logo">
+								jobba.help
+							</p>
 						</div>
 					</NextLink>
 				</NavbarBrand>
@@ -48,9 +51,11 @@ export const Navbar = () => {
 						isExternal
 						as={Link}
 						className="text-sm font-normal text-default-600 bg-default-100"
+						data-testid="Sponsor"
 						href={siteConfig.links.sponsor}
 						startContent={<HeartFilledIcon className="text-danger" />}
 						variant="flat"
+						
 					>
 						Sponsor
 					</Button>
@@ -66,9 +71,10 @@ export const Navbar = () => {
 			</NavbarContent>
 
 			{pathname === "/" && (
-				<NavbarItem className="hidden md:flex">
+				<NavbarItem className="hidden md:flex" data-testid="GoogleLogin">
 					<Button
 						className="text-sm font-normal text-default-600 bg-default-100"
+						data-testid="GoogleLogin"
 						startContent={<GoogleIcon className="text-danger" />}
 						variant="flat"
 						onClick={handleGoogleLogin}
