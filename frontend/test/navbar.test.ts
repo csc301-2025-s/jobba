@@ -38,13 +38,9 @@ test.describe('Navbar Tests', () => {
         const loginButton = await page.locator('[data-testid="GoogleLogin"] >> nth=0');
         await expect(loginButton).toBeVisible();
         await loginButton.click();
-
-        // // Step 4: Wait for the navigation to the Google login page
-        // await page.waitForURL('https://accounts.google.com/*'); 
-
-        // // Step 5: Verify that the current URL is Google login page
-        // const currentURL = page.url();
-        // expect(currentURL).toMatch(/https:\/\/accounts\.google\.com/);
+        await page.waitForURL('**/accounts.google.com/**');
+        const currentURL = page.url();
+        expect(currentURL).toMatch(/https:\/\/accounts\.google\.com/);
     });
 
     test('should display logout button on success page navbar', async ({ page }) => {
