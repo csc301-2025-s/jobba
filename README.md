@@ -23,6 +23,7 @@ The key features of the application are as follows:
 ### User Interface:
 - **Light & Dark Mode:** Users can switch between themes for better readability and accessibility.
 - **Intuitive Navigation:** The application provides a clear and structured flow:
+
   - _Gmail Sync Button:_ Initiates the tracking process.
   - _Google Login:_ Users authenticate securely with their Gmail account.
   - _Processing Page:_ Displays progress while scanning emails.
@@ -45,7 +46,8 @@ The key features of the application are as follows:
 
 ## Demonstration:
 Below is the visual demonstration of the website and what our current product is like:
-<SHORT VIDEOOOO
+
+[demo.webm](https://github.com/user-attachments/assets/e5072cfe-1f39-40d6-992f-40024d3e9fae)
 
 ## Testing the Features:
 We are using Playwright to test the following:
