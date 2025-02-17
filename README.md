@@ -69,7 +69,27 @@ Playwright also provides an option to receive a .html Test Report. To use this o
 1. Clone the repository from this GitHub link: [Jobba-Github-link](https://github.com/csc301-2025-s/jobba)
 2. Open the terminal and cd into the project.
 3. Open the develop-render branch by the command:
-     **git checkout render-deploy**
+  - **git checkout render-deploy**
 4. Write the following commands after to install the necessary packages:
-      
+  - **cd backend**
+  - Set up the virtual environment.
+    - FOR MAC/LINUX:
+        - python3 -m venv venv
+        - source venv/bin/activate
+    - FOR WINDOWS (CMD):
+        - python -m venv venv
+        - venv\Scripts\activate
+  - To install all the required packages:
+    - **pip install -r requirements.txt**
+  - Run the FastAPI Server using
+    - **uvicorn main:app --reload**
+5. To run the application:
+  - **cd frontend**
+  - **npm install .**
+  - **npm run dev**
+6. A link will be shown and you should click on the first one to access the website.
+
+## Deployment Instructions:
+
+
 
