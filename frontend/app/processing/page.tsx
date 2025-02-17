@@ -1,7 +1,6 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Spinner from "../../components/spinner";
 
 import Spinner from "../../components/spinner";
 

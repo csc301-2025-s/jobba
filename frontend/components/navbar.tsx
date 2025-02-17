@@ -5,7 +5,6 @@ import { Button, Link } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import NextLink from "next/link";
-import { usePathname } from "next/navigation";
 
 import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
@@ -55,7 +54,6 @@ export const Navbar = () => {
 						href={siteConfig.links.sponsor}
 						startContent={<HeartFilledIcon className="text-danger" />}
 						variant="flat"
-						
 					>
 						Sponsor
 					</Button>
