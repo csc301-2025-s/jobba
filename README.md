@@ -59,12 +59,15 @@ Once you have the app locally, follow these commands to install the package:
   - python -m playwright install
 
 To run the tests, run the following command:
+
   - npx playwright test
 
 Playwright also provides an option to receive a .html Test Report. To use this option, run the following commands:
   - npx playwright test --reporter=html
   - npx playwright show-report
-      ADD IMAGE!!!!!!
+
+<img width="538" alt="test" src="https://github.com/user-attachments/assets/3ba944bd-4cf3-4500-82db-3c78b4b68981" />
+
 ## Developer Instructions:
 1. Clone the repository from this GitHub link: [Jobba-Github-link](https://github.com/csc301-2025-s/jobba)
 2. Open the terminal and cd into the project.
