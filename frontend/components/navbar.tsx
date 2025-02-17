@@ -30,7 +30,7 @@ export const Navbar = () => {
 				<NavbarBrand as="li" className="gap-3 max-w-fit">
 					<NextLink className="flex justify-start items-center gap-1" href="/">
 						<div>
-							<p className="text-md font-bold text-inherit">jobba.help</p>
+							<p className="text-md font-bold text-inherit" data-testid="Logo">jobba.help</p>
 						</div>
 					</NextLink>
 				</NavbarBrand>
@@ -51,6 +51,7 @@ export const Navbar = () => {
 						href={siteConfig.links.sponsor}
 						startContent={<HeartFilledIcon className="text-danger" />}
 						variant="flat"
+						data-testid="Sponsor"
 					>
 						Sponsor
 					</Button>
@@ -66,12 +67,13 @@ export const Navbar = () => {
 			</NavbarContent>
 
 			{pathname === "/" && (
-				<NavbarItem className="hidden md:flex">
+				<NavbarItem className="hidden md:flex" data-testid="GoogleLogin">
 					<Button
 						className="text-sm font-normal text-default-600 bg-default-100"
 						startContent={<GoogleIcon className="text-danger" />}
 						variant="flat"
 						onClick={handleGoogleLogin}
+						data-testid="GoogleLogin"
 					>
 						Login with Google
 					</Button>
