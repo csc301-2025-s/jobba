@@ -60,7 +60,6 @@ Once you have the app locally, follow these commands to install the package:
   - python -m playwright install
 
 To run the tests, run the following command:
-
   - npx playwright test
 
 Playwright also provides an option to receive a .html Test Report. To use this option, run the following commands:
