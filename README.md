@@ -10,9 +10,9 @@
 **The problem it aims to solve.**
 Job searching can be overwhelming, with hundreds of applications to track across spreadsheets, often leading to errors. Jobba simplifies the process by automatically analyzing your Gmail inbox to track job application responses. It creates a **real-time spreadsheet** with key metrics like response rates, helping you refine and optimize your job search strategy.
 
-- The key features of the application are as follows:
-    1. Automated Tracking
-    2. User Interface
-    3. Data Export
+The key features of the application are as follows:
+    - Automated Tracking
+    - User Interface
+    - Data Export
 
 
