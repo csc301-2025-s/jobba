@@ -4,7 +4,7 @@ import { test, expect } from "@playwright/test";
 test("Google Login button is visible", async ({ page }) => {
 	await page.goto("http://localhost:3000");
 
-	const button = page.locator('[data-testid="homepage-google-login-button"]');
+	const button = page.locator('div').filter({hasText: /^Login with Google$/}).getByRole('button');
 	await expect(button).toBeVisible();
 });
 

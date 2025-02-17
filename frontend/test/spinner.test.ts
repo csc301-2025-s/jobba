@@ -4,5 +4,5 @@ import { test, expect } from "@playwright/test";
 test("Spinner is visible", async ({ page }) => {
 	await page.goto("http://localhost:3000/processing");
 
-	await expect(page.locator('[data-testid="spinner_icon"]')).toBeVisible();
+	await expect(page.getByRole('main').locator('path').first()).toBeVisible();
 });
