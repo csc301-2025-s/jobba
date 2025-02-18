@@ -86,13 +86,25 @@ Playwright also provides an option to receive a .html Test Report. To use this o
 3. If this is your first time creating credentials with this project, you will have to configure the OAuth consent screen.
 4. On the OAuth Consent Screen page, scroll to "Test Users" and add your gmail address.
 3. Click **Create Credentials** → **OAuth 2.0 Client IDs**.  
-4. Set the application type to **Web Application**.  
-5. Under "Authorized redirect URIs," add:  
+4. Set the application type to **Web Application**.
+5. Under "Authorized JavaScript origins," add:  
+   - http://localhost:3000
+6. Under "Authorized redirect URIs," add:  
    - http://localhost:8000/login
-6. Copy the **Client ID** and assign it to `GOOGLE_CLIENT_ID` in the `backend/.env` file
-7. Download and save your credentials locally to the `backend` folder for this repo in a file named ```credentials.json```
+7. Copy the **Client ID** and assign it to `GOOGLE_CLIENT_ID` in the `backend/.env` file
 8. In the search bar search for **Gmail API**
 9. Enable the Gmail API
+10. Under “Data Access” click “Add or Remove Scopes,” add:
+    - openid
+    - .../auth/gmail.readonly
+11. Under Branding, add:
+  - Application home page: http://localhost:3000
+  - Authorized domain 1: jobba.help
+  - Authorized domain 2: jobseeker-analytics.onrender.com
+  - Developer contact information: your email
+12. Under Clients, copy the Client ID and Client Secret for later.
+13. Under Clients, on the right side of the screen hover over “Download OAuth Client” and press to download your credentials locally to the backend folder for this repo in a file named credentials.json
+14. Download and save your credentials locally to the `backend` folder for this repo in a file named ```credentials.json```
 
 ### Starting the app
 First make sure you have cloned the repository
