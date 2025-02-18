@@ -93,6 +93,53 @@ Playwright also provides an option to receive a .html Test Report. To use this o
 6. A link will be shown and you should click on the first one to access the website.
 
 ## Deployment Instructions:
+Our app is currently deployed on [Render](https://render.com/) as 2 web services:
+1. Frontend app (jobba)
+2. Backend server (jobba-server)
 
+### Deploying frontend app (jobba)
+1. Build & Deploy Commands (Refer to the screenshot below for example)
+   - Root Directory: `frontend`
+   - Build Command: `npm install; npm run build`
+   - Start Command: `npm run start`
+![Screenshot 2025-02-17 at 7 13 49 PM](https://github.com/user-attachments/assets/09240aa4-2f83-44b2-a35c-cbd9c2494929)
 
+2. Environment Variables:
+Set the following environmental variable keys with the values listed below:
+   - `ENV_TYPE`: prod
+   - `NEXT_PUBLIC_API_URL`: https://jobba-server.onrender.com (Url of deployed backend server)
+   - `NEXT_PUBLIC_APP_URL`: https://jobba.onrender.com (Url of deployed app)
+
+### Deploying backend server (jobba-server)
+1. Build & Deploy Commands (Refer to the screenshot below for example)
+   - Root Directory: `backend`
+   - Build Command: `pip install -r requirements.txt`
+   - Start Command: `uvicorn main:app --host 0.0.0.0 --port $PORT`
+![Screenshot 2025-02-17 at 7 17 04 PM](https://github.com/user-attachments/assets/d0ccd296-229e-4927-b20e-9c2ad8e52e8e)
+
+2. Environment Variables:
+Set the following environmental variable keys with the values listed below:
+(The **bold values** indicate that you will need to enter info unique to you)
+
+  (These values should be the same as your local `.env` file with the exception of the URLS)
+   - `APP_URL`: https://jobba.onrender.com
+   - `CLIENT_SECRETS_FILE`: credentials.json
+   - `COOKIE_SECRET`: **your-random-secret-here**
+   - `DB_HOST`: **your-db-info**
+   - `DB_NAME`: **your-db-info**
+   - `DB_PASSWORD`: **your-db-info**
+   - `DB_PORT`: 5432
+   - `DB_USER`: **your-db-info**
+   - `ENV`: prod
+   - `GOOGLE_API_KEY`: **your-api-key** (from: https://aistudio.google.com/app/apikey)
+   - `GOOGLE_CLIENT_ID`: **your-id** (from: [Google Cloud OAuth 2.0 Client IDs](https://cloud.google.com/))
+       - ![Screenshot 2025-02-17 at 7 40 22 PM](https://github.com/user-attachments/assets/bd64658a-c4e6-4f6e-a38b-e2762ef2d650)
+   - `GOOGLE_SCOPES`: '["https://www.googleapis.com/auth/gmail.readonly", "openid"]'
+   - `REDIRECT_URI`: https://jobba-server.onrender.com/login
+   - `SERVER_URL`: https://jobba-server.onrender.com
+
+4. Secret Files:
+Add the following secret file with the content as listed below
+   - `credentials.json`: Your downloaded [Google Cloud OAuth 2.0 Client IDs](https://cloud.google.com/) json file.
+   - ![Screenshot 2025-02-17 at 7 38 44 PM](https://github.com/user-attachments/assets/65c3244c-fa1d-43e2-a499-cf904fd774fe)
 
