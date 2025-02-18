@@ -159,7 +159,7 @@ First make sure you have cloned the repository
    http://127.0.0.1:8000
 
 ### Starting the frontend:
-1. Go into the backend folder:
+1. Go into the frontend folder:
    ```sh
    cd frontend
    ```
