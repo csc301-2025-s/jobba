@@ -10,7 +10,7 @@ from db.companies import Companies
 from db.company_jobs import CompanyJobs
 from db.job_status import JobStatus
 from db.user_jobs import UserJobs
-from backend.db.user_job_status import UserJobStatuses
+from db.user_job_status import UserJobStatuses
 from db.user import Users
 from utils.initializer_utils import export_to_db
 from sqlalchemy import text
@@ -24,16 +24,24 @@ engine = create_engine(DATABASE_URL, echo=True)
 # Create tables in memory
 SQLModel.metadata.create_all(engine)
 
-# Create a test user
-test_user = Users(user_id=1, user_email="test@example.com", google_openid="test-google-id")
+test_user_1 = Users(user_id=1, user_email="test1@example.com", google_openid="test-google-id-1")
+test_user_2 = Users(user_id=2, user_email="test2@example.com", google_openid="test-google-id-2")
 
-# Sample email data
-test_message_data = {
-    "company_name": ["Test Company"],
+# Sample email data for both users
+test_message_data_1 = {
+    "company_name": ["Test Company A"],
     "application_status": ["Under Review"],
     "received_at": ["2024-03-02 12:30:00"],
-    "subject": ["Your Job Application"],
-    "from": ["hr@testcompany.com"]
+    "subject": ["Your Job Application A"],
+    "from": ["hr@testcompanyA.com"]
+}
+
+test_message_data_2 = {
+    "company_name": ["Test Company B"],
+    "application_status": ["Interview Scheduled"],
+    "received_at": ["2024-03-03 14:00:00"],
+    "subject": ["Your Job Application B"],
+    "from": ["recruitment@testcompanyB.com"]
 }
 
 def display_table(session, table_name):
@@ -44,7 +52,8 @@ def display_table(session, table_name):
     
 # Open a database session and run export_to_db
 with Session(engine) as session:
-    export_to_db(test_user, test_message_data, session)
+    export_to_db(test_user_1, test_message_data_1, session)
+    export_to_db(test_user_2, test_message_data_2, session)
 
     # Display the tables in a clean format
     for table in ["users", "companies", "job_titles", "company_jobs", "user_jobs", "job_statuses", "user_job_status"]:
