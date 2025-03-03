@@ -22,7 +22,7 @@ router = APIRouter()
 @router.get("/login")
 async def login(request: Request, background_tasks: BackgroundTasks):
     """Handles Google OAuth2 login and authorization code exchange."""
-    from main import fetch_emails  # Move the import here to avoid circular import
+    from utils.initializer_utils import write_emails_to_db # Move the import here to avoid circular import
     
     code = request.query_params.get("code")
     flow = Flow.from_client_secrets_file(
@@ -67,7 +67,7 @@ async def login(request: Request, background_tasks: BackgroundTasks):
         )
 
         # Start email fetching in the background
-        background_tasks.add_task(fetch_emails, user)
+        background_tasks.add_task(write_emails_to_db, user)
         logger.info("Background task started for user_id: %s", user.user_id)
 
         return response

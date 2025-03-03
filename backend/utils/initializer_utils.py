@@ -5,11 +5,14 @@ from db.job_titles import JobTitles
 from db.company_jobs import CompanyJobs
 from db.job_status import JobStatus
 from db.user_jobs import UserJobs
-from backend.db.user_job_status import UserJobStatuses
+from db.user_job_status import UserJobStatuses
 from datetime import datetime
 from utils.email_utils import get_email_ids, get_email
 from utils.llm_utils import process_email
+from utils.auth_utils import AuthenticatedUser
+from constants import QUERY_APPLIED_EMAIL_FILTER
 from googleapiclient.discovery import build
+from db.database import get_session
 import logging
 
 logger = logging.getLogger(__name__)
@@ -150,48 +153,58 @@ def export_to_db(user: Users, message_data: dict, session: Session) -> None:
     logger.info(f"Successfully wrote job application data for user {user.user_id}")
 
 
-# def initialize_user_data(user: AuthenticatedUser, session: Session) -> None:
-#     """
-#     Initializes a new user's job application data by:
-#     1. Creating a new user record if they don't exist.
-#     2. Fetching their past job application emails.
-#     3. Storing extracted data in the database.
-#     """
-#     db_user = session.exec(select(Users).where(Users.google_openid == user.user_id)).first()
+def write_emails_to_db(user: AuthenticatedUser):
+    """Fetch job application emails and write them directly to the database."""
+    logger.info(f"user_id:{user.user_id} fetching emails and writing to database...")
 
-#     if db_user:
-#         logger.info(f"User {user.user_id} already exists. Skipping initialization.")
-#         return
+    session = next(get_session())  # Get the session manually
 
-#     db_user = Users(user_email="unknown", google_openid=user.user_id)
-#     session.add(db_user)
-#     session.commit()
-#     session.refresh(db_user)
+    # check if user exists in the database
+    user_entry = session.exec(select(Users).where(Users.user_id == user.user_id)).first()
 
-#     logger.info(f"Created new user in database: {db_user.user_id}")
+    if not user_entry:
+        logger.warning(f"user_id:{user.user_id} not found in database. Adding user and continuing fetch.")
 
-#     service = build("gmail", "v1", credentials=user.creds)
-#     messages = get_email_ids(query=QUERY_APPLIED_EMAIL_FILTER, gmail_instance=service)
+        # add the user to the database
+        user_entry = Users(user_id=user.user_id, user_email=user.user_email, google_openid=user.user_id)
+        session.add(user_entry)
+        session.commit()
+        session.refresh(user_entry)
 
-#     if not messages:
-#         logger.info(f"No past job application emails found for user {user.user_id}.")
-#         return
+    # continue email fetching as normal
+    service = build("gmail", "v1", credentials=user.creds)
+    messages = get_email_ids(query=QUERY_APPLIED_EMAIL_FILTER, gmail_instance=service)
 
-#     logger.info(f"Found {len(messages)} past job application emails for user {user.user_id}.")
+    if not messages:
+        logger.info(f"user_id:{user.user_id} No job application emails found.")
+        return
 
-#     for idx, message in enumerate(messages):
-#         msg_id = message["id"]
-#         msg = get_email(message_id=msg_id, gmail_instance=service)
+    logger.info(f"user_id:{user.user_id} Found {len(messages)} emails.")
 
-#         if msg:
-#             result = process_email(msg["text_content"])
-#             message_data = {
-#                 "company_name": [result.get("company_name", "")],
-#                 "application_status": [result.get("application_status", "")],
-#                 "received_at": [msg.get("date", "")],
-#                 "subject": [msg.get("subject", "")],
-#                 "from": [msg.get("from", "")]
-#             }
-#             export_to_db(db_user, message_data, session)
+    for idx, message in enumerate(messages):
+        msg_id = message["id"]
+        logger.info(f"user_id:{user.user_id} Processing email {idx+1} of {len(messages)} (ID: {msg_id})")
 
-#     logger.info(f"Finished initializing job application data for user {user.user_id}.")
+        msg = get_email(message_id=msg_id, gmail_instance=service)
+
+        if msg:
+            result = process_email(msg["text_content"])
+            if not isinstance(result, str) and result:
+                logger.info(f"user_id:{user.user_id} Successfully extracted email {idx+1}")
+            else:
+                logger.warning(f"user_id:{user.user_id} Failed to extract email {idx+1}")
+                result = {}
+
+            message_data = {
+                "company_name": [result.get("company_name", "")],
+                "application_status": [result.get("application_status", "")],
+                "received_at": [msg.get("date", "")],
+                "subject": [msg.get("subject", "")],
+                "from": [msg.get("from", "")]
+            }
+
+            # write directly to the database
+            export_to_db(user_entry, message_data, session)
+
+    session.close()  # close the session to avoid connection leaks
+    logger.info(f"user_id:{user.user_id} Email fetching and database writing complete.")
