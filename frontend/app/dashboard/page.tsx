@@ -96,7 +96,7 @@ export default function Dashboard() {
 	};
 
 	return (
-		<div className="flex flex-col items-center justify-center text-center px-4">
+		<div className="flex flex-col items-center justify-center text-center px-4" data-testid="popup">
 			{/* Modal */}
 			<Transition appear as={Fragment} show={showModal}>
 				<Dialog as="div" className="relative z-50" onClose={() => setShowModal(false)}>
@@ -108,6 +108,7 @@ export default function Dashboard() {
 							</h2>
 							<DatePicker
 								className="mt-4 w-full p-2 border rounded-lg"
+								data-testid="start-date-calendar"
 								value={selectedDate}
 								onChange={(date) => setSelectedDate(date as CalendarDate)}
 							/>
@@ -136,6 +137,7 @@ export default function Dashboard() {
 							<div className="flex flex-col md:flex-row justify-end items-stretch md:items-center gap-3 w-full md:w-auto">
 								<DatePicker
 									className="mt-0 min-w-[200px] h-14 p-2 border rounded-lg"
+									data-testid="edit-start-date-calendar"
 									label="Start Date"
 									value={selectedDate}
 									onChange={(date) => setSelectedDate(date as CalendarDate)}
