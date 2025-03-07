@@ -44,7 +44,8 @@ if settings.is_publicly_deployed:
         "https://jobba.help",
         "https://www.jobba.help",
         "https://staging.jobba.help",
-        "https://www.staging.jobba.help"
+        "https://www.staging.jobba.help",
+        "https://staging-api.jobba.help"
     ]
 else:
     # Development CORS settings
