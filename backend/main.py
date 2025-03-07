@@ -1,8 +1,9 @@
 import datetime
 import logging
 import os
+from typing import List
 
-from fastapi import FastAPI, Request, Depends
+from fastapi import FastAPI, HTTPException, Request, Depends
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -10,7 +11,7 @@ from starlette.middleware.sessions import SessionMiddleware
 from fastapi.middleware.cors import CORSMiddleware
 
 from googleapiclient.discovery import build
-
+from db.user_email import UserEmail
 from constants import QUERY_APPLIED_EMAIL_FILTER
 from utils.auth_utils import AuthenticatedUser
 from utils.db_utils import export_to_csv
@@ -265,6 +266,33 @@ def success(request: Request, user_id: str = Depends(validate_session)):
         "success.html", {"request": request, "today": today}
     )
 
+
+@app.get("/user-emails", response_model=List[UserEmail])
+def query_emails(request: Request) -> None: 
+    with Session(engine) as session:
+        try:
+            user_id = request.session.get("user_id")
+
+            logger.info(f"Fetching emails for user_id: {user_id}")
+
+            statement = (
+                select(UserEmail)
+                .where(UserEmail.user_id == user_id)
+            )
+            user_emails = session.exec(statement).all()
+    
+            # If no records are found, return a 404 error
+            if not user_emails:
+                logger.warning(f"No emails found for user_id: {user_id}")
+                raise HTTPException(status_code=404, detail=f"No emails found for user_id: {user_id}")
+    
+            logger.info(f"Successfully fetched {len(user_emails)} emails for user_id: {user_id}")
+            return user_emails
+        
+        except Exception as e:
+            logger.error(f"Error fetching emails for user_id {user_id}: {e}")
+            raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
+        
 
 # Register Google login routes
 app.include_router(google_login_router)
