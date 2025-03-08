@@ -1,8 +1,9 @@
 import datetime
 import logging
 import os
+from typing import List
 
-from fastapi import FastAPI, Request, Depends, Response
+from fastapi import FastAPI, Request, Depends, Response, HTTPException
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -26,6 +27,7 @@ from utils.file_utils import get_user_filepath
 from utils.llm_utils import process_email
 from utils.config_utils import get_settings
 from session.session_layer import validate_session
+from db.user_email import UserEmail
 
 # Import Google login routes
 from login.google_login import router as google_login_router
@@ -42,15 +44,12 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 # Configure CORS
 if settings.is_publicly_deployed:
     # Production CORS settings
-    origins = [
-        "https://www.jobba.help",
-        "https://www.staging.jobba.help"
-    ]
+    origins = ["https://www.jobba.help", "https://www.staging.jobba.help"]
 else:
     # Development CORS settings
     origins = [
         "http://localhost:3000",  # Assuming frontend runs on port 3000
-        "http://127.0.0.1:3000"
+        "http://127.0.0.1:3000",
     ]
 
 
@@ -80,6 +79,7 @@ else:
     DATABASE_URL = settings.DATABASE_URL_LOCAL_VIRTUAL_ENV
 engine = create_engine(DATABASE_URL)
 
+
 class TestTable(SQLModel, table=True):
     id: int = Field(default=None, primary_key=True)
     name: str
@@ -91,6 +91,7 @@ SQLModel.metadata.create_all(engine)
 
 class TestData(BaseModel):
     name: str
+
 
 if settings.ENV == "dev":
 
@@ -118,6 +119,7 @@ if settings.ENV == "dev":
             session.commit()
             return {"message": "All data deleted successfully"}
 
+
 @app.post("/api/add-user")
 async def add_user_endpoint(user_data: UserData):
     """
@@ -130,7 +132,7 @@ async def add_user_endpoint(user_data: UserData):
         # Log the error for debugging purposes
         logger.error(f"An error occurred while adding user: {e}")
         return {"error": "An error occurred while adding the user."}
-    
+
 
 @app.get("/")
 async def root(request: Request, response_class=HTMLResponse):
@@ -300,6 +302,34 @@ def fetch_emails(user: AuthenticatedUser) -> None:
             # Exporting the email data to a CSV file
             export_to_csv(user.filepath, user.user_id, message_data)
     api_call_finished = True
+
+
+@app.get("/get-emails", response_model=List[UserEmail])
+def query_emails(request: Request) -> None:
+    with Session(engine) as session:
+        try:
+            user_id = request.session.get("user_id")
+
+            logger.info(f"Fetching emails for user_id: {user_id}")
+
+            statement = select(UserEmail).where(UserEmail.user_id == user_id)
+            user_emails = session.exec(statement).all()
+
+            # If no records are found, return a 404 error
+            if not user_emails:
+                logger.warning(f"No emails found for user_id: {user_id}")
+                raise HTTPException(
+                    status_code=404, detail=f"No emails found for user_id: {user_id}"
+                )
+
+            logger.info(
+                f"Successfully fetched {len(user_emails)} emails for user_id: {user_id}"
+            )
+            return user_emails
+
+        except Exception as e:
+            logger.error(f"Error fetching emails for user_id {user_id}: {e}")
+            raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
 
 
 @app.get("/success", response_class=HTMLResponse)

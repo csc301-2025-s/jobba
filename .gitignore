@@ -51,6 +51,7 @@ frontend/build/
 frontend/.vercel
 frontend/next-env.d.ts
 frontend/*.tsbuildinfo
+frontend/playwright-report/
 
 # Dependencies
 node_modules/
