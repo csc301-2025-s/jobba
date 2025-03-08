@@ -17,7 +17,6 @@ settings = get_settings()
 class AuthenticatedUser:
     """
     The AuthenticatedUser class is used to
-    The AuthenticatedUser class is used to
     store information about the user. This
     class is instantiated after the user has
     successfully authenticated with Google.
@@ -25,17 +24,18 @@ class AuthenticatedUser:
 
     def __init__(self, creds: Credentials):
         self.creds = creds
-        self.user_id = self.get_user_id()
+        self.user_id, self.user_email = self.get_user_id_and_email()
         self.filepath = get_user_filepath(self.user_id)
 
-    def get_user_id(self) -> str:
+    def get_user_id_and_email(self) -> tuple:
         """
-        Retrieves the user ID from Google OAuth2 credentials.
+        Retrieves the user ID and email from Google OAuth2 credentials.
 
         Parameters:
 
         Returns:
         - user_id: The unique user ID.
+        - email: The user's email address.
         """
         try:
             logger.info("Verifying ID token...")
@@ -43,7 +43,9 @@ class AuthenticatedUser:
                 self.creds.id_token, Request(), audience=settings.GOOGLE_CLIENT_ID
             )
             user_id = decoded_token["sub"]  # 'sub' is the unique user ID
-            return user_id
+            user_email = decoded_token.get("email")  # 'email' is the user's email address
+            return user_id, user_email
+        
         except (KeyError, TypeError):
             self.creds = self.creds.refresh(Request())
             if not self.creds.id_token:
@@ -51,29 +53,19 @@ class AuthenticatedUser:
                 logger.error(
                     "Could not retrieve user ID. Using proxy ID: %s", proxy_user_id
                 )
-                return proxy_user_id  # Generate a random ID
-            if not hasattr(self, "_retry"):
-                logger.error(
-                    "Could not retrieve user ID. Using proxy ID: %s", proxy_user_id
-                )
-                return proxy_user_id  # Generate a random ID
+                return proxy_user_id, None  # Generate a random ID and return None for email
             if not hasattr(self, "_retry"):
                 self._retry = True
-                return self.get_user_id()
+                return self.get_user_id_and_email()
             else:
                 proxy_user_id = str(uuid.uuid4())
                 logger.error(
                     "Could not retrieve user ID after retry. Using proxy ID: %s",
                     proxy_user_id,
                 )
-                logger.error(
-                    "Could not retrieve user ID after retry. Using proxy ID: %s",
-                    proxy_user_id,
-                )
-                return proxy_user_id
+                return proxy_user_id, None  # Generate a random ID and return None for email
         except Exception as e:
             logger.error("Error verifying ID token: %s", e)
             proxy_user_id = str(uuid.uuid4())
             logger.error("Could not verify ID token. Using proxy ID: %s", proxy_user_id)
-            return proxy_user_id  # Generate a random ID
-            return proxy_user_id  # Generate a random ID
+            return proxy_user_id, None  # Generate a random ID and return None for email
