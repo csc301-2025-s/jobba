@@ -162,7 +162,8 @@ async def logout(request: Request, response: RedirectResponse):
     logger.info("Logging out")
     request.session.clear()
     response.delete_cookie(key="__Secure-Authorization")
-    return RedirectResponse("/", status_code=303)
+    response.delete_cookie(key="Authorization")
+    return RedirectResponse(f"{APP_URL}", status_code=303)
 
 
 def fetch_emails_to_db(user: AuthenticatedUser) -> None:

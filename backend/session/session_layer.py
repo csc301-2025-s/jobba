@@ -3,7 +3,9 @@ import logging
 import secrets
 from datetime import datetime
 from fastapi import Request
+from utils.config_utils import get_settings
 
+settings = get_settings()
 
 def create_random_session_string() -> str:
     return secrets.token_urlsafe(32)  # Generates a random URL-safe string
@@ -15,7 +17,11 @@ def validate_session(request: Request) -> str:
     Session ID should match the stored session.
     Access token should not be expired.
     """
-    session_authorization = request.cookies.get("__Secure-Authorization")
+    if settings.is_publicly_deployed:
+         session_authorization = request.cookies.get("__Secure-Authorization")
+    else:
+        session_authorization = request.cookies.get("Authorization")
+
     session_id = request.session.get("session_id")
     session_access_token = request.session.get("access_token")
     token_exp = request.session.get("token_expiry")
