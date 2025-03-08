@@ -10,7 +10,7 @@ interface Application {
 	application_status: string;
 	received_at: string;
 	subject: string;
-	from: string;
+	email_from: string;
 }
 
 export default function Dashboard() {
@@ -94,7 +94,7 @@ export default function Dashboard() {
 									</TableCell>
 									<TableCell>{new Date(item.received_at).toLocaleDateString() || "--"}</TableCell>
 									<TableCell className="max-w-[300px] truncate">{item.subject || "--"}</TableCell>
-									<TableCell>{item.from || "--"}</TableCell>
+									<TableCell>{item.email_from || "--"}</TableCell>
 								</TableRow>
 							))}
 						</TableBody>
