@@ -25,8 +25,11 @@ export default function Dashboard() {
       try {
 
 
-        const response = await fetch(`${apiUrl}/user-emails`);
-        
+        const response = await fetch(`${apiUrl}/user-emails`, {
+          method: "GET",
+          credentials: "include", // Include cookies for session management
+       });    
+
         if (!response.ok) {
           if (response.status === 404) {
             setError('No applications found');
