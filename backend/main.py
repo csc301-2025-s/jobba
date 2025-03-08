@@ -161,7 +161,7 @@ async def download_file(request: Request, user_id: str = Depends(validate_sessio
 async def logout(request: Request, response: RedirectResponse):
     logger.info("Logging out")
     request.session.clear()
-    response.delete_cookie(key="Authorization")
+    response.delete_cookie(key="__Secure-Authorization")
     return RedirectResponse("/", status_code=303)
 
 
