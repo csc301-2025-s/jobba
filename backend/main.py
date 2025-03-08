@@ -151,7 +151,9 @@ async def download_file(request: Request, user_id: str = Depends(validate_sessio
     directory = get_user_filepath(user_id)
     filename = "emails.csv"
     filepath = f"{directory}/{filename}"
-    logger.info("DIRECTORY: " + os.getcwd())
+    logger.info("OS.GETCWD: " + os.getcwd())
+    logger.info("DIRECTORY: " + directory)
+
     if os.path.exists(filepath):
         logger.info("user_id:%s downloading from filepath %s", user_id, filepath)
         return FileResponse(filepath)
