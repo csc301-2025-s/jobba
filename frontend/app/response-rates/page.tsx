@@ -1,10 +1,11 @@
 import ResponseRateCard from "../../components/response_rate_card";
+import UniqueOpenRateChart from "@/components/response_rate_chart";
 
 export default function ResponseRates() {
 	return (
-		<div>
-			<h1>Response Rates Page</h1>
+		<main className="p-8">
 			<ResponseRateCard />
-		</div>
+			<UniqueOpenRateChart />
+		</main>
 	);
 }
