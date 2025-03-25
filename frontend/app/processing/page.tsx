@@ -42,6 +42,9 @@ const ProcessingPage = () => {
 						clearInterval(interval);
 						router.push("/dashboard");
 					}
+					if(progress===100){
+						router.push("/dashboard");
+					}
 				} catch {
 					router.push("/logout");
 				}
