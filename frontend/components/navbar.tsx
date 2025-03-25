@@ -33,17 +33,37 @@ export const Navbar = () => {
 	};
 
 	return (
-		<HeroUINavbar maxWidth="xl" position="sticky">
+		<HeroUINavbar isBordered className="p-2" maxWidth="xl" position="sticky">
 			<NavbarContent className="basis-1/5 sm:basis-full" justify="start">
 				<NavbarBrand as="li" className="gap-3 max-w-fit">
-					<NextLink className="flex justify-start items-center gap-1" href="/">
+					<NextLink className="flex justify-start items-center gap-1 pr-4" href="/">
 						<div>
-							<p className="text-md font-bold text-inherit" data-testid="Logo">
+							<p className="text-xl font-bold text-inherit" data-testid="Logo">
 								jobba.help
 							</p>
 						</div>
 					</NextLink>
 				</NavbarBrand>
+				{["/dashboard", "/response-rates"].includes(pathname) && (
+					<>
+						<Link className="p-2" color="foreground" href="/dashboard" underline="hover">
+							Dashboard
+						</Link>
+						<Link className="p-2" color="foreground" href="/response-rates" underline="hover">
+							Response Rates
+						</Link>
+					</>
+				)}
+				{["/preview/dashboard", "/preview/response-rates"].includes(pathname) && (
+					<>
+						<Link className="p-2" color="foreground" href="/preview/dashboard" underline="hover">
+							Dashboard
+						</Link>
+						<Link className="p-2" color="foreground" href="/preview/response-rates" underline="hover">
+							Response Rates
+						</Link>
+					</>
+				)}
 			</NavbarContent>
 
 			<NavbarContent className="hidden md:flex basis-1/5 sm:basis-full" justify="end">

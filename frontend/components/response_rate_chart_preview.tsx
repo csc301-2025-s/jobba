@@ -1,81 +1,46 @@
 "use client";
 import { BarChart, Bar, XAxis, YAxis, Cell, ResponsiveContainer, Tooltip, CartesianGrid } from "recharts";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-
-interface ResponseData {
-	title: string;
-	rate: number;
-}
-
-// const data: ResponseData[] = [
-// 	{ title: "Software Engineer", rate: 72 },
-// 	{ title: "Product Manager", rate: 68 },
-// 	{ title: "Data Scientist", rate: 65 },
-// 	{ title: "UX Designer", rate: 58 },
-// 	{ title: "DevOps Engineer", rate: 70 },
-// 	{ title: "test", rate: 80 },
-// ];
+import { useState } from "react";
+import { mockData } from "../utils/mockData";
 
 const BLUE_COLOR = "#3b82f6";
 
-export default function JobTitleResponseChart() {
-	const router = useRouter();
+// Transform mock data into response rate data
+const responseRateData = mockData.reduce((acc, curr) => {
+	const existing = acc.find((item) => item.title === curr.job_title);
+	if (existing) {
+		existing.count += 1;
+	} else {
+		acc.push({
+			title: curr.job_title, rate: Math.floor(Math.random() * 100),
+			count: 0
+		});
+	}
+	return acc;
+}, [] as {
+	count: number; title: string; rate: number 
+}[]);
+
+export default function JobTitleResponseChartPreview() {
 	const [activeIndex, setActiveIndex] = useState<number | null>(null);
-	const [data, setData] = useState<ResponseData[]>([]);
-
-	const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
-
-	useEffect(() => {
-		const fetchData = async () => {
-			try {
-				const response = await fetch(`${apiUrl}/get-response-rate`, {
-					method: "GET",
-					credentials: "include" // Include cookies for session management
-				});
-
-				if (!response.ok) {
-					if (response.status === 404) {
-						// No data found
-					} else {
-						throw new Error(`HTTP error! status: ${response.status}`);
-					}
-				}
-
-				const result = await response.json();
-
-				if (result.length === 0) {
-					// No data found
-				} else {
-					setData(result);
-				}
-			} catch {
-				// Failed to load data
-			} finally {
-				// Set loading to false
-			}
-		};
-
-		fetchData();
-	}, [router]);
 
 	return (
 		<div className="bg-gray p-6 rounded-xl border border-[#1e293b]">
 			<div className="flex justify-between items-center mb-6">
-				<h2 className="text-white text-xl font-semibold">Response Rate based on Job Titles</h2>
+				<h2 className="text-white text-xl font-semibold">Response Rate Preview</h2>
 			</div>
 
 			<div className="h-[500px]">
 				<ResponsiveContainer height="100%" width="100%">
 					<BarChart
-						data={data}
+						data={responseRateData}
 						margin={{ top: 5, right: 20, left: 0, bottom: 60 }}
 						onMouseLeave={() => setActiveIndex(null)}
 					>
 						<defs>
 							<linearGradient id="barGradient" x1="0" x2="0" y1="0" y2="1">
-								<stop offset="0%" stopColor="#60a5fa" /> {/* Lighter blue */}
-								<stop offset="100%" stopColor={BLUE_COLOR} /> {/* Your exact blue */}
+								<stop offset="0%" stopColor="#60a5fa" />
+								<stop offset="100%" stopColor={BLUE_COLOR} />
 							</linearGradient>
 						</defs>
 
@@ -104,11 +69,11 @@ export default function JobTitleResponseChart() {
 						<Tooltip
 							contentStyle={{
 								background: "#1e293b",
-								borderColor: BLUE_COLOR, // Blue border to match
+								borderColor: BLUE_COLOR,
 								borderRadius: "6px",
 								color: "#f8fafc"
 							}}
-							cursor={{ fill: "rgba(59, 130, 246, 0.1)" }} // Blue tint
+							cursor={{ fill: "rgba(59, 130, 246, 0.1)" }}
 							formatter={(value: number) => [`${value}%`, "Response Rate"]}
 						/>
 
@@ -119,11 +84,11 @@ export default function JobTitleResponseChart() {
 							radius={[4, 4, 0, 0]}
 							onMouseEnter={(_, index) => setActiveIndex(index)}
 						>
-							{data.map((entry, index) => (
+							{responseRateData.map((entry, index) => (
 								<Cell
 									key={`cell-${index}`}
 									fill={index === activeIndex ? "url(#barGradient)" : BLUE_COLOR}
-									stroke={index === activeIndex ? "#93c5fd" : "none"} // Light blue border on hover
+									stroke={index === activeIndex ? "#93c5fd" : "none"}
 									strokeWidth={index === activeIndex ? 2 : 0}
 								/>
 							))}
