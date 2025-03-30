@@ -37,7 +37,6 @@ app.include_router(auth_routes.router)
 app.include_router(email_routes.router)
 app.include_router(file_routes.router)
 app.include_router(users_routes.router)
-app.include_router(start_date_routes.router)
 
 limiter = Limiter(key_func=get_remote_address)
 app.state.limiter = limiter  # Ensure limiter is assigned
