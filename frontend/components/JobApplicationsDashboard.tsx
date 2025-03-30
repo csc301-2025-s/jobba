@@ -1,7 +1,14 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Table, TableHeader, TableBody, TableColumn, TableRow, TableCell } from "@heroui/table";
+import {
+	Table,
+	TableHeader,
+	TableBody,
+	TableColumn,
+	TableRow,
+	TableCell
+} from "@heroui/table";
 import {
 	Button,
 	Dropdown,
@@ -40,7 +47,6 @@ interface JobApplicationsDashboardProps {
 	extraHeader?: React.ReactNode;
 }
 
-// Load sort key from localStorage or use default
 const getInitialSortKey = (key: string) => {
 	return typeof window !== "undefined" ? localStorage.getItem("sortKey") || key : key;
 };
@@ -58,10 +64,14 @@ export default function JobApplicationsDashboard({
 	const [sortedData, setSortedData] = useState<Application[]>([]);
 	const [selectedKeys, setSelectedKeys] = useState(new Set([getInitialSortKey(initialSortKey)]));
 	const [showDelete, setShowDelete] = useState(false);
+	const [rowToDelete, setRowToDelete] = useState<Application | null>(null);
+	const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
-	const selectedValue = React.useMemo(() => Array.from(selectedKeys).join(", ").replace(/_/g, ""), [selectedKeys]);
+	const selectedValue = React.useMemo(
+		() => Array.from(selectedKeys).join(", ").replace(/_/g, ""),
+		[selectedKeys]
+	);
 
-	// Sort data based on selected key
 	useEffect(() => {
 		const sortData = () => {
 			const sorted = [...data];
@@ -83,8 +93,6 @@ export default function JobApplicationsDashboard({
 				case "Status":
 					sorted.sort((a, b) => a.application_status.localeCompare(b.application_status));
 					break;
-				default:
-					break;
 			}
 			setSortedData(sorted);
 		};
@@ -96,7 +104,6 @@ export default function JobApplicationsDashboard({
 		}
 	}, [selectedKeys, data]);
 
-	// Handle sorting selection change and store it in localStorage
 	const handleSortChange = (keys: Set<string>) => {
 		const sortKey = Array.from(keys)[0];
 		localStorage.setItem("sortKey", sortKey);
@@ -106,30 +113,57 @@ export default function JobApplicationsDashboard({
 	return (
 		<div className="p-6">
 			{extraHeader}
+
 			<Modal isOpen={showDelete} onOpenChange={(isOpen) => setShowDelete(isOpen)}>
 				<ModalContent>
-					{(onClose) => (
-						<>
-							<ModalHeader className="flex flex-col gap-1">Confirm Removal</ModalHeader>
-							<ModalBody>
-								<p>
-									Are you sure you want to remove this row? Every job application impacts your
-									metrics, so it's important to keep all records unless we accidentally made a mistake
-									and picked up a non-job-related record.
-								</p>
-							</ModalBody>
-							<ModalFooter>
-								<Button color="default" variant="ghost" onPress={onClose}>
-									Cancel
-								</Button>
-								<Button color="danger" onPress={onClose}>
-									Yes, remove it
-								</Button>
-							</ModalFooter>
-						</>
-					)}
+					{(onClose) => {
+						const handleDelete = async () => {
+							if (!rowToDelete?.id) return;
+
+							try {
+								await fetch(`${apiUrl}/delete/${rowToDelete.id}`, {
+									method: 'DELETE'
+								});
+
+								setSortedData(prev => prev.filter(app => app.id !== rowToDelete.id));
+								onClose();
+								setRowToDelete(null);
+							} catch (error) {
+								console.error("Failed to delete row", error);
+							}
+						};
+
+						return (
+							<>
+								<ModalHeader className="flex flex-col gap-1">Confirm Removal</ModalHeader>
+								<ModalBody>
+									<p>
+										Are you sure you want to remove this row? Every job application impacts your
+										metrics, so it's important to keep all records unless we accidentally made a
+										mistake and picked up a non-job-related record.
+									</p>
+								</ModalBody>
+								<ModalFooter>
+									<Button
+										color="default"
+										variant="ghost"
+										onPress={() => {
+											onClose();
+											setRowToDelete(null);
+										}}
+									>
+										Cancel
+									</Button>
+									<Button color="danger" onPress={handleDelete}>
+										Yes, remove it
+									</Button>
+								</ModalFooter>
+							</>
+						);
+					}}
 				</ModalContent>
 			</Modal>
+
 			<div className="flex items-center justify-between mb-4">
 				<h1 className="text-2xl font-bold">{title}</h1>
 				<div className="flex gap-x-4">
@@ -147,7 +181,7 @@ export default function JobApplicationsDashboard({
 						</DropdownTrigger>
 						<DropdownMenu
 							disallowEmptySelection
-							aria-label="Single selection example"
+							aria-label="Sort Options"
 							selectedKeys={selectedKeys}
 							selectionMode="single"
 							variant="flat"
@@ -162,6 +196,7 @@ export default function JobApplicationsDashboard({
 							</DropdownSection>
 						</DropdownMenu>
 					</Dropdown>
+
 					<Button
 						color="primary"
 						isDisabled={!data || data.length === 0}
@@ -225,7 +260,10 @@ export default function JobApplicationsDashboard({
 												isIconOnly
 												size="sm"
 												variant="light"
-												onPress={() => setShowDelete(!showDelete)}
+												onPress={() => {
+													setRowToDelete(item);
+													setShowDelete(true);
+												}}
 											>
 												<TrashIcon className="text-gray-800 dark:text-gray-300" />
 											</Button>

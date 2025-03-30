@@ -5,6 +5,8 @@ from db.user_emails import UserEmails
 from utils.config_utils import get_settings
 from session.session_layer import validate_session
 from database import engine
+from slowapi import Limiter
+from slowapi.util import get_remote_address
 
 # Logger setup
 logger = logging.getLogger(__name__)
@@ -17,6 +19,7 @@ api_call_finished = False
 
 # FastAPI router for email routes
 router = APIRouter()
+limiter = Limiter(key_func=get_remote_address)
 
 
 @router.get("/user-response-rate")
@@ -44,3 +47,10 @@ def calculate_response_rate(
 
         response_rate_percent = (interview_requests / total_apps) * 100
         return round(response_rate_percent, 1)
+
+
+@router.delete("/delete/{application_id}")
+# @limiter.limit("5/minute")
+async def delete_application(application_id: str) -> None:
+    logger.info("Deleting application with id %s", application_id)
+    return
