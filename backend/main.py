@@ -19,7 +19,7 @@ from contextlib import asynccontextmanager
 from database import create_db_and_tables
 
 # Import routes
-from routes import email_routes, auth_routes, file_routes, users_routes, start_date_routes
+from routes import email_routes, auth_routes, file_routes, users_routes
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
