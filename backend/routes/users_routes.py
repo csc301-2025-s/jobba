@@ -1,5 +1,5 @@
 import logging
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, Request, HTTPException
 from sqlmodel import Session, select
 from db.user_emails import UserEmails
 from utils.config_utils import get_settings
@@ -50,7 +50,18 @@ def calculate_response_rate(
 
 
 @router.delete("/delete/{application_id}")
-# @limiter.limit("5/minute")
-async def delete_application(application_id: str) -> None:
-    logger.info("Deleting application with id %s", application_id)
+@limiter.limit("5/minute")
+async def delete_application(application_id: str, request: Request, user_id: str = Depends(validate_session)) -> None:
+    with Session(engine) as session:
+        user_email = session.exec(
+            select(UserEmails).where(UserEmails.user_id == user_id and UserEmails.id == application_id)
+        ).first()
+        
+        if not user_email:
+            raise HTTPException(status_code=400, detail="No application found")
+        session.delete(user_email)
+        session.commit()
+        session.refresh(user_email)
+
+    logger.info("Application with id %s deleted successfully", application_id)
     return
