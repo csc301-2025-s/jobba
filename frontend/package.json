@@ -10,6 +10,7 @@
 		"prettier": "prettier --check .",
 		"format": "prettier --write . && eslint . --fix",
 		"lint": "eslint .",
+		"postbuild": "mkdir -p .next/standalone/.next/static && cp -R public .next/standalone/ && cp -R .next/static .next/standalone/.next/",
 		"check": "prettier --check . && eslint ."
 	},
 	"dependencies": {
