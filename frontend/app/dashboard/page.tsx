@@ -13,6 +13,7 @@ export default function Dashboard() {
 	const [loading, setLoading] = useState(true);
 	const [downloading, setDownloading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
+	const [lastUpdated, setLastUpdated] = useState<string | null>(null);
 
 	const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
@@ -50,6 +51,7 @@ export default function Dashboard() {
 					setError("No applications found");
 				} else {
 					setData(result);
+					setLastUpdated(new Date().toISOString());
 				}
 			} catch {
 				setError("Failed to load applications");
@@ -166,6 +168,34 @@ export default function Dashboard() {
 		}
 	}
 
+	async function syncData() {
+
+		try {
+			// Fetch applications from backend (same as fetchData logic)
+			const response = await fetch(`${apiUrl}/get-emails`, {
+				method: "GET",
+				credentials: "include" // Include cookies for session management
+			});
+	
+			if (!response.ok) {
+				throw new Error("Failed to sync data");
+			}
+	
+			setLastUpdated(new Date().toISOString());
+			addToast({
+			  title: "Sync Successful",
+			  description: "Data has been synced.",
+			  color: "success",
+			});
+		  } catch {
+			addToast({
+			  title: "Sync Failed",
+			  description: "Failed to sync data. Please try again.",
+			  color: "danger",
+			});
+		  }
+	};
+
 	return (
 		<JobApplicationsDashboard
 			data={data}
@@ -173,6 +203,8 @@ export default function Dashboard() {
 			loading={loading}
 			onDownloadCsv={downloadCsv}
 			onDownloadSankey={downloadSankey}
+			onSyncData={syncData}
+			lastUpdated={new Date().toISOString()}
 		/>
 	);
 }

@@ -17,7 +17,7 @@ import {
 	Tooltip
 } from "@heroui/react";
 
-import { DownloadIcon, SortIcon, TrashIcon } from "@/components/icons";
+import { DownloadIcon, SortIcon, TrashIcon, SyncIcon } from "@/components/icons";
 
 export interface Application {
 	id?: string;
@@ -36,6 +36,8 @@ interface JobApplicationsDashboardProps {
 	downloading: boolean;
 	onDownloadCsv: () => void;
 	onDownloadSankey: () => void;
+	onSyncData: () => void; // New prop for syncing data
+  	lastUpdated: string; // New prop for the last updated timestamp
 	initialSortKey?: string;
 	extraHeader?: React.ReactNode;
 }
@@ -52,6 +54,8 @@ export default function JobApplicationsDashboard({
 	downloading,
 	onDownloadCsv,
 	onDownloadSankey,
+	onSyncData, // Destructure the new prop
+  	lastUpdated, // Destructure the new prop
 	initialSortKey = "Date (Newest)",
 	extraHeader
 }: JobApplicationsDashboardProps) {
@@ -180,8 +184,28 @@ export default function JobApplicationsDashboard({
 					>
 						Download CSV
 					</Button>
-				</div>
-			</div>
+				{/* Sync Data Button */}
+				<Button
+					color="secondary"
+					isDisabled={false}
+					isLoading={false}
+					startContent={< SyncIcon/>}
+					onPress={onSyncData}
+					className="transition-all duration-300 ease-in-out
+             		hover:bg-purple-900 active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+				>
+            Sync Data
+          </Button>
+        </div>
+      </div>
+      {/* Display Last Updated Timestamp */}
+			<div className="mt-4 mb-6 text-sm text-white-600 font-bold text-right">
+		{lastUpdated ? (
+			<>Last synced at: {new Date(lastUpdated).toLocaleString()}</>
+		) : (
+			"Not synced yet"
+		)}
+		</div>
 
 			{loading ? (
 				<p>Loading applications...</p>
